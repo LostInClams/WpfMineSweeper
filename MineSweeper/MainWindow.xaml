@@ -10,7 +10,22 @@
         <ItemsControl ItemsSource="{Binding Board.Tiles}" Loaded="ThisAsDataContext">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding TileText}"/>
+                    <Border BorderThickness="1" BorderBrush="Black">
+                        <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding TileText}" Grid.Row="0" HorizontalAlignment="Center" TextAlignment="Center" Grid.ColumnSpan="2"/>
+                        <TextBlock Text="{Binding X}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" TextAlignment="Center" />
+                        <TextBlock Text="{Binding Y}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" TextAlignment="Center" />
+                    </Grid>
+                    </Border>
+                    
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>

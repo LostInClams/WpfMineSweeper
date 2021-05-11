@@ -33,9 +33,9 @@ namespace MineSweeper
                 {
                     var tile = new Tile(new Point(x, y), mineIndices.Contains(x + y * width));
                     m_boardTiles[x + y * width] = tile;
-                    for (int y1 = Clamp(y - 1, 0, height); y1 < Math.Min(y + 1, height); y1++)
+                    for (int y1 = Math.Max(y - 1, 0); y1 <= Math.Min(y + 1, height-1); y1++)
                     {
-                        for (int x1 = Clamp(x - 1, 0, width); x1 < Math.Min(x + 1, width); x1++)
+                        for (int x1 = Math.Max(x - 1, 0); x1 <= Math.Min(x + 1, width-1); x1++)
                         {
                             if (x1 == x && y1 == y)
                             {

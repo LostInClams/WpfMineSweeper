@@ -48,6 +48,9 @@ namespace MineSweeper
             }
         }
 
+        public int X => m_index.X;
+        public int Y => m_index.Y;
+
         HashSet<Point> m_adjacentMineIndices = new HashSet<Point>();
         public int NumAdjacentMines => m_adjacentMineIndices.Count;
         public string TileText => m_isMine ? "X" : $"{NumAdjacentMines}";
