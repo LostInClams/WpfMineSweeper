@@ -35,5 +35,21 @@ namespace MineSweeper
         {
             DataContext = this;
         }
+
+        private void RevealTile(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is FrameworkElement element)
+            {
+                if (element.DataContext is Tile tile)
+                {
+                    tile.IsRevealed = true;
+                }
+            }
+        }
+
+        private void MarkTile(object sender, MouseButtonEventArgs e)
+        {
+            
+        }
     }
 }
