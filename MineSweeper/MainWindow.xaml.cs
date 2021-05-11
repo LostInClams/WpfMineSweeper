@@ -20,9 +20,20 @@ namespace MineSweeper
     /// </summary>
     public partial class MainWindow : Window
     {
+        Board m_board;
+
+        public Board Board => m_board;
+        
         public MainWindow()
         {
             InitializeComponent();
+
+            m_board = new Board(10, 10, 10);
+        }
+
+        private void ThisAsDataContext(object sender, RoutedEventArgs e)
+        {
+            DataContext = this;
         }
     }
 }
