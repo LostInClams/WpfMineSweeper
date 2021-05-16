@@ -9,6 +9,24 @@
     <Window.Resources>
         <local:InvertedBoolToVisibilityConverter x:Key="InvertedBoolVisibility" />
         <BooleanToVisibilityConverter x:Key="BoolVisibility"/>
+        <local:BoolToIconConverter x:Key="BoolToIcon">
+            <local:BoolToIconConverter.TrueValue>
+                <PathGeometry>
+                    <PathGeometry.Figures>
+                        <PathFigure StartPoint="10,20">
+                            <PathFigure.Segments>
+                                <LineSegment Point="10,0" />
+                                <LineSegment Point="16,4" />
+                                <LineSegment Point="10,8" />
+                            </PathFigure.Segments>
+                        </PathFigure>
+                    </PathGeometry.Figures>
+                </PathGeometry>
+            </local:BoolToIconConverter.TrueValue>
+            <local:BoolToIconConverter.FalseValue>
+                <PathGeometry/>
+            </local:BoolToIconConverter.FalseValue>
+        </local:BoolToIconConverter>
     </Window.Resources>
     <Grid>
         <ItemsControl ItemsSource="{Binding Board.Tiles}" Loaded="ThisAsDataContext" Margin="20">
@@ -17,7 +35,11 @@
                     <Border BorderThickness="1" BorderBrush="Black">
                         <Grid>
                             <Grid Visibility="{Binding IsRevealed, Converter={StaticResource InvertedBoolVisibility}}">
-                                <Button PreviewMouseLeftButtonUp="RevealTile" PreviewMouseRightButtonUp="MarkTile"/>
+                                <Button PreviewMouseLeftButtonUp="RevealTile" PreviewMouseRightButtonUp="MarkTile">
+                                    <Button.Content>
+                                        <Path StrokeThickness="1" Stroke="Black" Data="{Binding IsFlagged, Converter={StaticResource BoolToIcon}}" />
+                                    </Button.Content>
+                                </Button>
                             </Grid>
                             <!-- Revealed UI -->
                             <Grid Visibility="{Binding IsRevealed, Converter={StaticResource BoolVisibility}}">

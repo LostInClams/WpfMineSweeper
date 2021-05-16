@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace MineSweeper
     public class Board
     {
         readonly Tile[] m_boardTiles;
-        public Tile[] Tiles => m_boardTiles;
+        public ReadOnlyCollection<Tile> Tiles => Array.AsReadOnly(m_boardTiles);
         public int Width { get; private set; }
         public int Height { get; private set; }
 
@@ -47,6 +48,52 @@ namespace MineSweeper
                             }
                         }
                     }
+                }
+            }
+        }
+
+        public void RevealTile(Tile tile)
+        {
+            if (tile.IsMine)
+            {
+                // End game..
+            }
+
+            if (tile.NumAdjacentMines > 0)
+            {
+                tile.IsRevealed = true;
+            }
+            else
+            {
+                tile.IsRevealed = true;
+                DoForAdjacentTiles(tile, RevealTileRecursive);
+            }
+        }
+
+        private void RevealTileRecursive(Tile tile)
+        {
+            if (tile.IsRevealed)
+            {
+                return;
+            }
+            tile.IsRevealed = true;
+            if (tile.NumAdjacentMines == 0)
+            {
+                DoForAdjacentTiles(tile, RevealTileRecursive);
+            }
+        }
+
+        public void DoForAdjacentTiles(Tile tile, Action<Tile> action)
+        {
+            for (int y = Math.Max(tile.Y - 1, 0); y <= Math.Min(tile.Y + 1, Height - 1); y++)
+            {
+                for (int x = Math.Max(tile.X - 1, 0); x <= Math.Min(tile.X + 1, Width - 1); x++)
+                {
+                    if (x == tile.X && y == tile.Y)
+                    {
+                        continue;
+                    }
+                    action?.Invoke(m_boardTiles[x + y * Width]);
                 }
             }
         }

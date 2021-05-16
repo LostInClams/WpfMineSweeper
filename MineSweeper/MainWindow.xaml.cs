@@ -42,14 +42,20 @@ namespace MineSweeper
             {
                 if (element.DataContext is Tile tile)
                 {
-                    tile.IsRevealed = true;
+                    m_board.RevealTile(tile);
                 }
             }
         }
 
         private void MarkTile(object sender, MouseButtonEventArgs e)
         {
-            
+            if (sender is FrameworkElement element)
+            {
+                if (element.DataContext is Tile tile)
+                {
+                    tile.IsFlagged = !tile.IsFlagged;
+                }
+            }
         }
     }
 }
