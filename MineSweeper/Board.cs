@@ -1,23 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MineSweeper
 {
-    public class Board
+    public class Board : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         readonly Tile[] m_boardTiles;
         public ReadOnlyCollection<Tile> Tiles => Array.AsReadOnly(m_boardTiles);
         public int Width { get; private set; }
         public int Height { get; private set; }
+        public int MineCount { get; private set; }
+
+        bool _gameEnded = false;
+        public bool GameEnded 
+        {
+            get => _gameEnded;
+            private set
+            {
+                if (_gameEnded == value)
+                {
+                    return;
+                }
+                _gameEnded = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GameEnded)));
+            }
+        }
+
+        bool _gameWon = false;
+        public bool GameWon 
+        {
+            get => _gameWon;
+            private set
+            {
+                if (_gameWon == value)
+                {
+                    return;
+                }
+                _gameWon = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(GameWon)));
+            }
+        }
 
         public Board(int width, int height, int numMines)
         {
             Width = width;
             Height = height;
+            MineCount = numMines;
             m_boardTiles = new Tile[width * height];
             // TODO: Make less naive solution for picking which tiles should be mines
             var randGen = new Random();
@@ -56,7 +91,7 @@ namespace MineSweeper
         {
             if (tile.IsMine)
             {
-                // End game..
+                EndGame(false);
             }
 
             if (tile.NumAdjacentMines > 0)
@@ -97,6 +132,25 @@ namespace MineSweeper
                 }
             }
         }
+
+        public void CheckComplete()
+        {
+            var revealedTiles = m_boardTiles.Where((tile) => {
+                return tile.IsRevealed;
+            });
+
+            if (revealedTiles.Count() == m_boardTiles.Length - MineCount)
+            {
+                EndGame(true);
+            }
+        }
+
+        public void EndGame(bool won)
+        {
+            GameWon = won;
+            GameEnded = true;
+        }
+
 
         public int Clamp(int val, int min, int max)
         {

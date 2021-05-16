@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,17 +19,34 @@ namespace MineSweeper
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        Board m_board;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public Board Board => m_board;
+        Board _board;
+        public Board Board {
+            get => _board;
+            private set
+            {
+                if (_board == value)
+                {
+                    return;
+                }
+                _board = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Board)));
+            }
+        }
         
         public MainWindow()
         {
             InitializeComponent();
 
-            m_board = new Board(10, 10, 10);
+            //Board = new Board(10, 10, 1);
+        }
+
+        public void StartNewGame()
+        {
+            Board = new Board(10, 10, 10);
         }
 
         private void ThisAsDataContext(object sender, RoutedEventArgs e)
@@ -42,9 +60,11 @@ namespace MineSweeper
             {
                 if (element.DataContext is Tile tile)
                 {
-                    m_board.RevealTile(tile);
+                    Board.RevealTile(tile);
                 }
             }
+
+            Board.CheckComplete();
         }
 
         private void MarkTile(object sender, MouseButtonEventArgs e)
@@ -56,6 +76,11 @@ namespace MineSweeper
                     tile.IsFlagged = !tile.IsFlagged;
                 }
             }
+        }
+
+        private void NewGameClicked(object sender, RoutedEventArgs e)
+        {
+            StartNewGame();
         }
     }
 }

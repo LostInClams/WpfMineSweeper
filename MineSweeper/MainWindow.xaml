@@ -29,41 +29,54 @@
         </local:BoolToIconConverter>
     </Window.Resources>
     <Grid>
-        <ItemsControl ItemsSource="{Binding Board.Tiles}" Loaded="ThisAsDataContext" Margin="20">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border BorderThickness="1" BorderBrush="Black">
-                        <Grid>
-                            <Grid Visibility="{Binding IsRevealed, Converter={StaticResource InvertedBoolVisibility}}">
-                                <Button PreviewMouseLeftButtonUp="RevealTile" PreviewMouseRightButtonUp="MarkTile">
-                                    <Button.Content>
-                                        <Path StrokeThickness="1" Stroke="Black" Data="{Binding IsFlagged, Converter={StaticResource BoolToIcon}}" />
-                                    </Button.Content>
-                                </Button>
+        <!-- During game grid -->
+        <Grid Visibility="{Binding Board.GameEnded, Converter={StaticResource InvertedBoolVisibility}}" Loaded="ThisAsDataContext" Margin="10">
+            <ItemsControl ItemsSource="{Binding Board.Tiles}" Loaded="ThisAsDataContext">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="Black">
+                            <Grid>
+                                <Grid Visibility="{Binding IsRevealed, Converter={StaticResource InvertedBoolVisibility}}">
+                                    <Button PreviewMouseLeftButtonUp="RevealTile" PreviewMouseRightButtonUp="MarkTile">
+                                        <Button.Content>
+                                            <Path StrokeThickness="1" Stroke="Black" Data="{Binding IsFlagged, Converter={StaticResource BoolToIcon}}" />
+                                        </Button.Content>
+                                    </Button>
+                                </Grid>
+                                <!-- Revealed UI -->
+                                <Grid Visibility="{Binding IsRevealed, Converter={StaticResource BoolVisibility}}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding TileText}" Grid.Row="0" HorizontalAlignment="Center" TextAlignment="Center" Grid.ColumnSpan="2"/>
+                                    <TextBlock Text="{Binding X}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" TextAlignment="Center" />
+                                    <TextBlock Text="{Binding Y}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" TextAlignment="Center" />
+                                </Grid>
                             </Grid>
-                            <!-- Revealed UI -->
-                            <Grid Visibility="{Binding IsRevealed, Converter={StaticResource BoolVisibility}}">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding TileText}" Grid.Row="0" HorizontalAlignment="Center" TextAlignment="Center" Grid.ColumnSpan="2"/>
-                                <TextBlock Text="{Binding X}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" TextAlignment="Center" />
-                                <TextBlock Text="{Binding Y}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" TextAlignment="Center" />
-                            </Grid>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Rows="{Binding Board.Width}" Columns="{Binding Board.Height}" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="{Binding Board.Width}" Columns="{Binding Board.Height}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Grid>
+        <!-- Menu grid -->
+        <Grid Visibility="{Binding Board.GameEnded, Converter={StaticResource BoolVisibility}}" Loaded="ThisAsDataContext" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Text="Game Won" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Visibility="{Binding Board.GameWon, Converter={StaticResource BoolVisibility}}"/>
+            <TextBlock Text="Game Lost" FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Visibility="{Binding Board.GameWon, Converter={StaticResource InvertedBoolVisibility}}"/>
+            <Button Content="New Game" Grid.Row="2" HorizontalAlignment="Center" Click="NewGameClicked"/>
+        </Grid>
     </Grid>
 </Window>
