@@ -40,9 +40,33 @@ namespace MineSweeper
                 return true;
             }
 
+            var unrevealedTiles = m_board.Tiles.Where((tile) =>
+            {
+                return !tile.IsRevealed;
+            });
+            var flaggedTiles = m_board.Tiles.Where((tile) => 
+            {
+                return tile.IsFlagged;
+            });
+            var hiddenMines = m_board.MineCount - flaggedTiles.Count();
+            var unrevealedTileCount = unrevealedTiles.Count();
+
             for (int i = 0; i < tileMineProbability.Length; i++)
             {
-                tileMineProbability[i] = -1f;
+                var tile = m_board.Tiles[i];
+                if (tile.IsRevealed)
+                {
+                    tileMineProbability[i] = -1;
+                    continue;
+                }
+                else if (tile.IsFlagged)
+                {
+                    tileMineProbability[i] = 1;
+                }
+                else
+                {
+                    tileMineProbability[i] = (float)hiddenMines / (float)unrevealedTileCount;
+                }
             }
 
             foreach (var numberedTile in numberedTiles)
@@ -109,8 +133,12 @@ namespace MineSweeper
                 bool anyFlagged = false;
                 if (tileMineProbability[i] > .99f)
                 {
-                    m_board.Tiles[i].IsFlagged = true;
-                    anyFlagged = true;
+                    var tile = m_board.Tiles[i];
+                    if (!tile.IsFlagged)
+                    { 
+                        tile.IsFlagged = true;
+                        anyFlagged = true;
+                    }
                 }
                 if (anyFlagged)
                 {
