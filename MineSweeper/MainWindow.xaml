@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MineSweeper"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Loaded="ThisAsDataContext">
     <Window.Resources>
         <local:InvertedBoolToVisibilityConverter x:Key="InvertedBoolVisibility" />
         <BooleanToVisibilityConverter x:Key="BoolVisibility"/>
@@ -28,9 +28,21 @@
             </local:BoolToIconConverter.FalseValue>
         </local:BoolToIconConverter>
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding StepAiCommand}" Key="N" />
+    </Window.InputBindings>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu>
+            <MenuItem Header="AI">
+                <MenuItem Header="Step" Click="StepClicked" />
+            </MenuItem>
+        </Menu>
         <!-- During game grid -->
-        <Grid Visibility="{Binding Board.GameEnded, Converter={StaticResource InvertedBoolVisibility}}" Loaded="ThisAsDataContext" Margin="10">
+        <Grid Visibility="{Binding Board.GameEnded, Converter={StaticResource InvertedBoolVisibility}}" Loaded="ThisAsDataContext" Margin="10" Grid.Row="1">
             <ItemsControl ItemsSource="{Binding Board.Tiles}" Loaded="ThisAsDataContext">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -69,7 +81,7 @@
             </ItemsControl>
         </Grid>
         <!-- Menu grid -->
-        <Grid Visibility="{Binding Board.GameEnded, Converter={StaticResource BoolVisibility}}" Loaded="ThisAsDataContext" Margin="10">
+        <Grid Visibility="{Binding Board.GameEnded, Converter={StaticResource BoolVisibility}}" Loaded="ThisAsDataContext" Margin="10" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />

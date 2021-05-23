@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -23,7 +24,12 @@ namespace MineSweeper
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        readonly ICommand _StepAiCommand;
+        public ICommand StepAiCommand => _StepAiCommand;
+
         Board _board;
+        AIPlayer m_ai;
+        IEnumerator m_aiSolver;
         public Board Board {
             get => _board;
             private set
@@ -40,13 +46,16 @@ namespace MineSweeper
         public MainWindow()
         {
             InitializeComponent();
+            _StepAiCommand = new ActionCommand(() => StepAI());
 
-            //Board = new Board(10, 10, 1);
+            StartNewGame();
         }
 
         public void StartNewGame()
         {
-            Board = new Board(10, 10, 10);
+            Board = new Board(3, 3, 2);
+            m_ai = new AIPlayer(Board);
+            m_aiSolver = m_ai.SolveBoard();
         }
 
         private void ThisAsDataContext(object sender, RoutedEventArgs e)
@@ -81,6 +90,16 @@ namespace MineSweeper
         private void NewGameClicked(object sender, RoutedEventArgs e)
         {
             StartNewGame();
+        }
+
+        private void StepClicked(object sender, RoutedEventArgs e)
+        {
+            StepAI();
+        }
+
+        public void StepAI()
+        {
+            m_aiSolver.MoveNext();
         }
     }
 }

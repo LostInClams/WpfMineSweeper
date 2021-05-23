@@ -118,6 +118,11 @@ namespace MineSweeper
             }
         }
 
+        public int SequentialIndex(Tile tile)
+        {
+            return tile.X + tile.Y * Width;
+        }
+
         public void DoForAdjacentTiles(Tile tile, Action<Tile> action)
         {
             for (int y = Math.Max(tile.Y - 1, 0); y <= Math.Min(tile.Y + 1, Height - 1); y++)
@@ -133,7 +138,22 @@ namespace MineSweeper
             }
         }
 
-        public void CheckComplete()
+        public IEnumerable<Tile> GetAdjacentTiles(Tile tile)
+        {
+            for (int y = Math.Max(tile.Y - 1, 0); y <= Math.Min(tile.Y + 1, Height - 1); y++)
+            {
+                for (int x = Math.Max(tile.X - 1, 0); x <= Math.Min(tile.X + 1, Width - 1); x++)
+                {
+                    if (x == tile.X && y == tile.Y)
+                    {
+                        continue;
+                    }
+                    yield return m_boardTiles[x + y * Width];
+                }
+            }
+        }
+
+        public bool CheckComplete()
         {
             var revealedTiles = m_boardTiles.Where((tile) => {
                 return tile.IsRevealed;
@@ -142,7 +162,9 @@ namespace MineSweeper
             if (revealedTiles.Count() == m_boardTiles.Length - MineCount)
             {
                 EndGame(true);
+                return true;
             }
+            return false;
         }
 
         public void EndGame(bool won)
