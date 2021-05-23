@@ -27,9 +27,10 @@ namespace MineSweeper
         readonly ICommand _StepAiCommand;
         public ICommand StepAiCommand => _StepAiCommand;
 
-        Board _board;
         AIPlayer m_ai;
         IEnumerator m_aiSolver;
+
+        Board _board;
         public Board Board {
             get => _board;
             private set
@@ -53,7 +54,7 @@ namespace MineSweeper
 
         public void StartNewGame()
         {
-            Board = new Board(3, 3, 2);
+            Board = new Board(10, 10, 10);
             m_ai = new AIPlayer(Board);
             m_aiSolver = m_ai.SolveBoard();
         }

@@ -118,21 +118,31 @@ namespace MineSweeper
                 }
             }
 
-            var indexOfLowestProbability = -1;
+            // Float comparison should be safe in this case since we are dealing with fractions of int divisions that always generate the same result and not going back and forth
             var lowestProbability = 1f;
             for (int i = 0; i < tileMineProbability.Length; i++)
             {
                 var mineProbability = tileMineProbability[i];
-                if (mineProbability > 0 && mineProbability < lowestProbability)
+                if (mineProbability > 0)
                 {
-                    lowestProbability = mineProbability;
-                    indexOfLowestProbability = i;
+                    lowestProbability = Math.Min(lowestProbability, mineProbability);
+                }
+            }
+            var indicesWithLowestProbability = new List<int>();
+            for (int i = 0; i < tileMineProbability.Length; i++)
+            {
+                var mineProbability = tileMineProbability[i];
+                if (mineProbability == lowestProbability)
+                {
+                    indicesWithLowestProbability.Add(i);
                 }
             }
 
-            if (indexOfLowestProbability != -1)
+            if (indicesWithLowestProbability.Count > 0)
             {
-                m_board.RevealTile(m_board.Tiles[indexOfLowestProbability]);
+                var indexToReveal = rand.Next(0, indicesWithLowestProbability.Count);
+                m_board.RevealTile(m_board.Tiles[indicesWithLowestProbability[indexToReveal]]);
+                return true;
             }
             return false;
         }
