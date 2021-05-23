@@ -56,18 +56,8 @@
                                     </Button>
                                 </Grid>
                                 <!-- Revealed UI -->
-                                <Grid Visibility="{Binding IsRevealed, Converter={StaticResource BoolVisibility}}">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding TileText}" Grid.Row="0" HorizontalAlignment="Center" TextAlignment="Center" Grid.ColumnSpan="2"/>
-                                    <TextBlock Text="{Binding X}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" TextAlignment="Center" />
-                                    <TextBlock Text="{Binding Y}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" TextAlignment="Center" />
+                                <Grid Visibility="{Binding IsRevealed, Converter={StaticResource BoolVisibility}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                    <TextBlock Text="{Binding TileText}" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"/>
                                 </Grid>
                             </Grid>
                         </Border>
