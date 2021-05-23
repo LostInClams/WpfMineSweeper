@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MineSweeper"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Loaded="ThisAsDataContext">
+        Title="Mine Sweepers" Height="500" Width="500" Loaded="ThisAsDataContext"
+        MinWidth="500" MinHeight="500" >
     <Window.Resources>
         <local:InvertedBoolToVisibilityConverter x:Key="InvertedBoolVisibility" />
         <BooleanToVisibilityConverter x:Key="BoolVisibility"/>
@@ -13,11 +14,11 @@
             <local:BoolToIconConverter.TrueValue>
                 <PathGeometry>
                     <PathGeometry.Figures>
-                        <PathFigure StartPoint="10,20">
+                        <PathFigure StartPoint="7,20">
                             <PathFigure.Segments>
-                                <LineSegment Point="10,0" />
-                                <LineSegment Point="16,4" />
-                                <LineSegment Point="10,8" />
+                                <LineSegment Point="7,0" />
+                                <LineSegment Point="13,4" />
+                                <LineSegment Point="7,8" />
                             </PathFigure.Segments>
                         </PathFigure>
                     </PathGeometry.Figures>
@@ -37,8 +38,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Menu>
-            <MenuItem Header="AI">
-                <MenuItem Header="Step" Click="StepClicked" />
+            <MenuItem Header="Help">
+                <MenuItem Header="Do Move" Click="StepClicked" InputGestureText="N" />
             </MenuItem>
         </Menu>
         <!-- During game grid -->
